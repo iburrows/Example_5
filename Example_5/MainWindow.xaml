@@ -1,0 +1,100 @@
+﻿<Window
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Example_5"
+        xmlns:Converters="clr-namespace:Example_5.Converters" x:Class="Example_5.MainWindow"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="525"
+        >
+    <Window.Resources>
+        <Converters:BrushConverter x:Key="BrushConverter"/>
+        <Style x:Key="ToggleDefault" TargetType="{x:Type ItemsControl}">
+            <Setter Property="ItemsSource" Value="{Binding ToggleButtonCollection}"/>
+        </Style>
+    </Window.Resources>
+    <Window.DataContext>
+        <Binding Path="Main" Source="{StaticResource Locator}"/>
+    </Window.DataContext>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="6*"/>
+            <RowDefinition Height="1*"/>
+        </Grid.RowDefinitions>
+
+        <TabControl Width="500" Height="280">
+            <TabItem Header="Data">
+
+                <ItemsControl Style="{StaticResource ToggleDefault}" ItemsSource="{Binding ToggleButtonCollection}" HorizontalAlignment="Left" VerticalAlignment="Center">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel Orientation="Vertical"/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal" Margin="10">
+                                <Button Content="Toggle" Width="50" Height="20" Command="{Binding DataContext.ToggleButton, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:MainWindow}}}" CommandParameter="{Binding}"/>
+                                <Ellipse Height="20" Width="20" Stroke="Black" Fill="{Binding Value, Converter={StaticResource BrushConverter}, Mode=OneWay}" Margin="40,0,0,0"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+
+                <!--<Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="3*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="1*"/>
+                        <RowDefinition Height="1*"/>
+                        <RowDefinition Height="1*"/>
+                        <RowDefinition Height="1*"/>
+                        <RowDefinition Height="1*"/>
+                    </Grid.RowDefinitions>
+
+                    <Button Content="Toggle" Width="70" Height="20" Grid.Row="0"/>
+                    <Ellipse Width="20" Height="20" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Left" Margin="5" Stroke="Black"/>
+
+                    <Button Content="Toggle" Width="70" Height="20" Grid.Row="1"/>
+                    <Ellipse Width="20" Height="20" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Left" Margin="5" Stroke="Black"/>
+                    
+                    <Button Content="Toggle" Width="70" Height="20" Grid.Row="2"/>
+                    <Ellipse Width="20" Height="20" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Left" Margin="5" Stroke="Black"/>
+                    
+                    <Button Content="Toggle" Width="70" Height="20" Grid.Row="3"/>
+                    <Ellipse Width="20" Height="20" Grid.Row="3" Grid.Column="1" HorizontalAlignment="Left" Margin="5" Stroke="Black"/>
+                    
+                    <Button Content="Toggle" Width="70" Height="20" Grid.Row="4"/>
+                    <Ellipse Width="20" Height="20" Grid.Row="4" Grid.Column="1" HorizontalAlignment="Left" Margin="5" Stroke="Black"/>
+                </Grid>-->
+            </TabItem>
+
+            <TabItem Header="History">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="6*"/>
+                        <RowDefinition Height="1*"/>
+                    </Grid.RowDefinitions>
+                    <DataGrid AutoGenerateColumns="False" ItemsSource="{Binding HistoryCollection}">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Date and Time" Width="*" Binding="{Binding Date}"/>
+                            <DataGridTextColumn Header="Receiving or Sending" Width="*" Binding="{Binding Data}"/>
+                            <DataGridTextColumn Header="Data" Width="*" Binding="{Binding SentReceived}"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+
+                    <Button Content="Clear" Grid.Row="1" Margin="5" Command="{Binding ClearBtnClicked}"/>
+                </Grid>
+            </TabItem>
+        </TabControl>
+        <StackPanel Orientation="Horizontal" Grid.Row="1" HorizontalAlignment="Right">
+            <Button Content="Listen" Width="50" Height="20" Margin="5" Command="{Binding ListenBtnClicked}"/>
+            <Button Content="Connect" Width="50" Height="20" Margin="5" Command="{Binding ConnectBtnClicked}"/>
+        </StackPanel>
+    </Grid>
+
+</Window>
